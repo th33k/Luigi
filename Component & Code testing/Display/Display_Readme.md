@@ -1,298 +1,105 @@
+---
+
+---
+-----
+# Setting Up the 3.5-Inch TFT Raspberry Pi Display
+
+## Introduction
+The 3.5-inch TFT display is a touch screen designed for the Raspberry Pi. It offers a compact and convenient way to interact with your Raspberry Pi projects.
 
 ![[Pi_Display.png]]
+## Components and Specifications
+### Display Specifications:
+- **Screen Size**: 3.5 inches
+- **Resolution**: 480x320 pixels
+- **Touch Panel**: Resistive touch
+- **Interface**: SPI
 
-To use a 3.5 inch TFT touch display with a Raspberry Pi 3, you'll need to install a compatible operating system and configure the display. Here’s a step-by-step guide:
+### Electrical Specifications:
+- **Input Voltage**: 5V (from Raspberry Pi)
+- **Current**: Approximately 100mA (without backlight)
+
+### Pin Configuration:
+| Pin Number             | Function | Description                            |
+| ---------------------- | -------- | -------------------------------------- |
+| 1 (3.3V)               | 3.3V     | Power supply for the display logic     |
+| 2 (5V)                 | 5V       | Power supply for the display backlight |
+| 3 (GPIO2)              | SDA      | I2C data                               |
+| 5 (GPIO3)              | SCL      | I2C clock                              |
+| 19 (GPIO10)            | MOSI     | SPI data input                         |
+| 21 (GPIO9)             | MISO     | SPI data output                        |
+| 23 (GPIO11)            | SCLK     | SPI clock                              |
+| 24 (GPIO8)             | CE0      | SPI chip select                        |
+| 22 (GPIO25)            | D/C      | Data/Command control                   |
+| 18 (GPIO24)            | RST      | Reset                                  |
+| 16 (GPIO23)            | TP_CS    | Touch panel chip select                |
+| 12 (GPIO18)            | TP_IRQ   | Touch panel interrupt                  |
+| 6, 9, 14, 20, 25 (GND) | GND      | Ground                                 |
 
 ![[Display_Setup.png]]
-### Supported Operating Systems
-1. **Raspberry Pi OS (formerly Raspbian)**: The most common and officially supported OS.
-2. **Kali Linux**: If you're into penetration testing.
-3. **RetroPie**: For retro gaming.
-4. **Ubuntu MATE**: For a desktop experience.
-5. **Windows 10 IoT Core**: For IoT applications.
-
-### Setting Up the 3.5 Inch TFT Touch Display
-
-1. **Prepare Your MicroSD Card**:
-   - Download the desired OS image.
-	   - [Raspbian](https://www.raspberrypi.com/software/) 
-	   - Ubuntu
-	   - Kali Linux
-   - [Raspberry Pi Imager](https://www.raspberrypi.com/software/) is the quick and easy way to install Raspberry Pi OS and other operating systems to a microSD card, ready to use with your Raspberry Pi. (Use a tool like Rufus Balena Etcher to flash the image onto the microSD card.)
-
-2. **Connect the Display**:
-   - Connect the 3.5 inch TFT touch display to the GPIO pins of the Raspberry Pi. Make sure it's securely attached.
-
-	
-
-1. **Boot Your Raspberry Pi**:
-   - Insert the microSD card into the Raspberry Pi.
-   - Connect the power supply and boot it up.
-
-2. **Install the Necessary Drivers**:
-   - Most 3.5 inch TFT displays come with a CD or a link to download drivers. If not, you can usually find drivers on the manufacturer's website or GitHub.
-
-3. **Driver Installation**:
-   - Open the terminal and update your system:
-     ```bash
-     sudo apt update
-     sudo apt upgrade
-     ```
-   - Download the driver package. For example, if using a commonly available driver from GitHub:
-     ```bash
-     git clone https://github.com/goodtft/LCD-show.git
-     ```
-   - Navigate to the downloaded directory:
-     ```bash
-     cd LCD-show
-     ```
-   - Install the driver. The specific command might vary depending on the display model. For instance, for a 3.5 inch TFT display:
-     ```bash
-     sudo ./LCD35-show
-     ```
-
-6. **Reboot Your Raspberry Pi**:
-   - After the installation completes, reboot the Raspberry Pi:
-     ```bash
-     sudo reboot
-     ```
-
-7. **Calibration (if needed)**:
-   - If the touch is not accurate, you might need to calibrate the screen. This can often be done using the `xinput_calibrator` tool.
-     ```bash
-     sudo apt install xinput-calibrator
-     xinput_calibrator
-     ```
-
-### Troubleshooting
-- **Display Not Working**: Ensure the display is correctly connected and try re-seating it.
-- **Touch Not Working**: Make sure the touch driver is installed correctly.
-- **Calibration Issues**: Re-run the calibration tool.
-
-By following these steps, you should be able to set up and use your 3.5 inch TFT touch display with your Raspberry Pi 3 successfully.
-
------
-
-There are several different manufacturers and types of 3.5 inch TFT touch displays for the Raspberry Pi, and they often require specific drivers. Here are a few alternatives to the `goodtft` drivers you can try:
-
-### Alternative Drivers
-
-1. **WaveShare Drivers**:
-   WaveShare is a well-known manufacturer of Raspberry Pi displays. Their drivers can be found on their official GitHub repository.
-
-   ```bash
-   git clone https://github.com/waveshare/LCD-show.git
-   cd LCD-show
-   sudo ./LCD35-show
-   ```
-
-2. **Elecrow Drivers**:
-   Elecrow also provides drivers for their displays. Instructions and drivers are typically provided on their product pages.
-
-   ```bash
-   git clone https://github.com/Elecrow-keen/Elecrow-LCD35.git
-   cd Elecrow-LCD35
-   sudo ./Elecrow-LCD35-show
-   ```
-
-3. **KeDei Drivers**:
-   KeDei offers a variety of displays with their own drivers available on their website or GitHub.
-
-   ```bash
-   git clone https://github.com/KeDei/lcd35-driver.git
-   cd lcd35-driver
-   sudo ./install.sh
-   ```
-
-4. **Notro's FBTFT Drivers**:
-   Notro's FBTFT drivers support a wide range of TFT displays. These drivers are integrated into the Raspberry Pi Linux kernel, so you might not need to clone a repository. Instead, you can directly configure the device tree overlay.
-
-   ```bash
-   sudo modprobe fbtft_device name=<driver_name>
-   ```
-
-   Replace `<driver_name>` with the appropriate driver name for your display. You can find the list of supported drivers [here](https://github.com/notro/fbtft).
-
-### Generic Steps for Installing Other Drivers
-
-1. **Download and Install the Driver**:
-   - Clone the repository with the driver.
-   - Navigate to the downloaded directory.
-   - Run the installation script or follow the instructions provided in the repository's README file.
-
-2. **Configure the Display**:
-   - After installing the driver, the display might need additional configuration. This often involves editing configuration files such as `/boot/config.txt` or `/etc/modules`.
-
-3. **Reboot**:
-   - After making the necessary changes, reboot your Raspberry Pi to apply the new settings.
-
-   ```bash
-   sudo reboot
-   ```
-
-### Example for WaveShare 3.5 Inch TFT Display
-
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/waveshare/LCD-show.git
-   ```
-
-2. **Navigate to the Directory**:
-   ```bash
-   cd LCD-show
-   ```
-
-3. **Run the Installation Script**:
-   ```bash
-   sudo ./LCD35-show
-   ```
-
-4. **Reboot**:
-   ```bash
-   sudo reboot
-   ```
-
-### Troubleshooting
-
-- **Check Connections**: Ensure all connections are secure.
-- **Compatibility**: Verify that the driver is compatible with your specific display model.
-- **Logs**: Check logs for errors using `dmesg` or by examining `/var/log/syslog`.
-
-By using the correct driver for your display, you should be able to achieve a functional setup on your Raspberry Pi 3 with the 3.5 inch TFT touch display.
-
------
-
-Here is a comprehensive list of alternative drivers for 3.5 inch TFT touch displays for the Raspberry Pi. These drivers come from different manufacturers and community contributions.
-
-### 1. **GoodTFT Drivers**
-
-**GitHub Repository**:
-```bash
-git clone https://github.com/goodtft/LCD-show.git
-cd LCD-show
-sudo ./LCD35-show
-```
-
-### 2. **Waveshare Drivers**
-
-**GitHub Repository**:
-```bash
-git clone https://github.com/waveshare/LCD-show.git
-cd LCD-show
-sudo ./LCD35-show
-```
-
-### 3. **Elecrow Drivers**
-
-**GitHub Repository**:
-```bash
-git clone https://github.com/Elecrow-keen/Elecrow-LCD35.git
-cd Elecrow-LCD35
-sudo ./Elecrow-LCD35-show
-```
-
-### 4. **KeDei Drivers**
-
-**GitHub Repository**:
-```bash
-git clone https://github.com/KeDei/lcd35-driver.git
-cd lcd35-driver
-sudo ./install.sh
-```
-
-### 5. **Notro's FBTFT Drivers**
-
-These drivers are part of the Raspberry Pi Linux kernel, so you don't need to clone a repository. Instead, you configure the device tree overlay directly.
-
-**Commands**:
-```bash
-sudo modprobe fbtft_device name=<driver_name>
-```
-Replace `<driver_name>` with the appropriate driver name for your display. You can find the list of supported drivers [here](https://github.com/notro/fbtft).
-
-### 6. **WaveShare SpotPear Drivers**
-
-**GitHub Repository**:
-```bash
-git clone https://github.com/swkim01/waveshare-dtoverlays.git
-cd waveshare-dtoverlays
-sudo ./install.sh
-```
-
-### 7. **LCD-Show Drivers by juj/fbcp-ili9341**
-
-For displays using the ILI9341 controller.
-
-**GitHub Repository**:
-```bash
-git clone https://github.com/juj/fbcp-ili9341.git
-cd fbcp-ili9341
-mkdir build
-cd build
-cmake ..
-make -j
-sudo ./fbcp-ili9341
-```
-
-### 8. **LCD-Show Drivers by tianyoujian**
-
-**GitHub Repository**:
-```bash
-git clone https://github.com/tianyoujian/LCD-show.git
-cd LCD-show
-sudo ./LCD35-show
-```
-
-### 9. **XPT2046 Touch Controller Drivers**
-
-For displays using the XPT2046 touch controller.
-
-**GitHub Repository**:
-```bash
-git clone https://github.com/juj/fbcp-ili9341.git
-cd fbcp-ili9341
-mkdir build
-cd build
-cmake -DADAFRUIT_ILI9341=ON -DXPT2046=ON ..
-make -j
-sudo ./fbcp-ili9341
-```
-
-### Installation Steps for All Drivers
-
-1. **Prepare Your MicroSD Card**:
-   - Download the desired OS image.
-   - Use a tool like Balena Etcher to flash the image onto the microSD card.
-
-2. **Connect the Display**:
-   - Connect the 3.5 inch TFT touch display to the GPIO pins of the Raspberry Pi. Make sure it's securely attached.
-
-3. **Boot Your Raspberry Pi**:
-   - Insert the microSD card into the Raspberry Pi.
-   - Connect the power supply and boot it up.
-
-4. **Download and Install the Driver**:
-   - Clone the repository with the driver.
-   - Navigate to the downloaded directory.
-   - Run the installation script or follow the instructions provided in the repository's README file.
-
-5. **Reboot Your Raspberry Pi**:
-   - After making the necessary changes, reboot your Raspberry Pi to apply the new settings.
-   ```bash
-   sudo reboot
-   ```
-
-### Troubleshooting
-
-- **Check Connections**: Ensure all connections are secure.
-- **Compatibility**: Verify that the driver is compatible with your specific display model.
-- **Logs**: Check logs for errors using `dmesg` or by examining `/var/log/syslog`.
-
-By using the correct driver for your display, you should be able to achieve a functional setup on your Raspberry Pi 3 with the 3.5 inch TFT touch display.
-
------
-
-### References
-
--  http://www.lcdwiki.com/3.5inch_RPi_Display
-- https://www.waveshare.com/wiki/3.5inch_RPi_LCD_(A)
+## Setting Up the Display
+
+### Step 1: Hardware Connection
+1. **Turn off your Raspberry Pi** to prevent any damage during the connection.
+2. **Connect the Display to the Raspberry Pi**:
+    - Align the display's GPIO pins with the Raspberry Pi's GPIO header.
+    - Carefully press the display onto the Raspberry Pi, ensuring all pins are correctly aligned.
+
+### Step 2: Install the Driver
+To use the display with your Raspberry Pi, you need to install the appropriate drivers. Here’s how:
+
+1. **Update the System**:
+    ```bash
+    sudo apt-get update
+    sudo apt-get upgrade
+    ```
+
+2. **Download the Driver**:
+    ```bash
+    git clone https://github.com/waveshare/LCD-show.git
+    cd LCD-show/
+    ```
+
+3. **Install the Driver**:
+    - For the 3.5-inch display:
+        ```bash
+    chmod +x LCD35-show
+	./LCD35-show
+        ```
+
+4. **Reboot the Raspberry Pi**:
+    ```bash
+    sudo reboot
+    ```
+
+### Step 3: Configure the Touchscreen (Optional)
+If you want to calibrate the touchscreen:
+
+1. **Install the calibration tool**:
+    ```bash
+    sudo apt-get install -y xinput-calibrator
+    ```
+
+2. **Run the calibration tool**:
+    ```bash
+    DISPLAY=:0.0 xinput_calibrator
+    ```
+
+3. Follow the on-screen instructions to calibrate the touch screen.
+
+### Step 4: Verify the Setup
+After rebooting, the display should show the Raspberry Pi desktop environment. You can test the touchscreen functionality and ensure everything works correctly.
+
+## Troubleshooting
+- **Display not turning on**: Ensure all GPIO connections are secure and the Raspberry Pi is powered on.
+- **Touchscreen not responding**: Recalibrate the touchscreen using the calibration tool.
+- **Screen flickering**: Check the power supply and ensure the Raspberry Pi is receiving enough power.
+
+## Additional Resources
+- [Waveshare Wiki for 3.5-inch RPi LCD](https://www.waveshare.com/wiki/3.5inch_RPi_LCD_(A))
+- [LCD Wiki for 3.5-inch RPi Display](http://www.lcdwiki.com/3.5inch_RPi_Display)
+
+## Conclusion
+Setting up the 3.5-inch TFT display on your Raspberry Pi is straightforward with the right steps and drivers. This guide provides detailed instructions to ensure a smooth installation and configuration process. Enjoy your new touch screen interface for your Raspberry Pi projects!
+
+---
