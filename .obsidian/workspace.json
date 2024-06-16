@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Component & Code testing/Display/Display_Readme.md",
+                "file": "Component & Code testing/VNC.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Component & Code testing/Display/Display_Readme.md",
+                "file": "Component & Code testing/VNC.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Component & Code testing/Display/Display_Readme.md",
+                "file": "Component & Code testing/VNC.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Component & Code testing/Display/Display_Readme.md"
+                "file": "Component & Code testing/VNC.md"
               }
             }
           }
@@ -148,9 +148,9 @@
   },
   "active": "6db009217e5873a6",
   "lastOpenFiles": [
-    "Untitled.md",
     "Component & Code testing/Display/Display_Readme.md",
-    "Display_Setup.png",
-    "Pi_Display.png"
+    "Untitled.md",
+    "Component & Code testing/Display/Display_Setup.png",
+    "Component & Code testing/Display/Pi_Display.png"
   ]
 }
