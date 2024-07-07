@@ -2,15 +2,27 @@ import os
 import threading
 import time
 import socket
+import subprocess
+
+import google.generativeai as genai
 import pygame
+import pyttsx3
 import requests
-import speech_recognition as sr
+import RPi.GPIO as GPIO
 import sounddevice as sd
 import soundfile as sf
-import pyttsx3
-from gtts import gTTS
+import speech_recognition as sr
 import webview
-import google.generativeai as genai
+
+from gtts import gTTS
+
+# Define the double tap interval
+DOUBLE_TAP_INTERVAL = 0.5  
+# Setup GPIO
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(5, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+double_tap_detected = False
 
 # Configuration
 gemini_api_key = "AIzaSyBiy1LbIazAYhR34_TxpaDEx53eWe0wi6Q"
@@ -203,6 +215,25 @@ def text_to_speech(answer, internet):
         play_audio(output_file)
         os.remove(output_file)
 
+def check_double_tap():
+    global double_tap_detected
+    global last_tap_time, tap_count
+    tap_count = 0
+    last_tap_time = 0
+    start_time = time.time()
+
+    while time.time() - start_time < 0.5:  # 1 second window for double tap
+        if GPIO.input(5) == GPIO.HIGH:
+                current_time = time.time()
+                if (current_time - last_tap_time) < DOUBLE_TAP_INTERVAL:
+                    tap_count += 1
+                else:
+                    tap_count = 1  # Reset tap count if the interval is too long
+                last_tap_time = current_time
+                if tap_count == 2:
+                    double_tap_detected = True
+                    break
+
 def open_webview():
     """Open webview for user interaction."""
     try:
@@ -221,6 +252,14 @@ def voice_assistant(internet_status):
 
     try:
         for _ in range(10):
+
+            # Check for double-tap
+            check_double_tap()
+            if double_tap_detected:
+                print("Double tap detected. Exiting...")
+                subprocess.run(['python3', '/home/pi/Desktop/LUIGI_Final/Function.py'])
+                os._exit(0)  # Terminate the script
+
             text = speech_to_text(recognizer, microphone, internet_status)
             print("You said:", text)
             play_audio(os.path.join(current_directory, 'Resources', 'Audio', 'mmm.wav'))
@@ -233,11 +272,16 @@ def voice_assistant(internet_status):
             ]:
                 play_audio(os.path.join(current_directory, 'Resources', 'Audio', 'tata.wav'))
                 print("Exit: Bye Bye")
-                break
+                subprocess.run(['python3', '/home/pi/Desktop/LUIGI_Final/Function.py'])
+                os._exit(0)
             play_audio(os.path.join(current_directory, 'Resources', 'Audio', 'aaha.wav'))
             text_to_speech(answer, internet_status)
+
     except KeyboardInterrupt:
         print("Exiting...")
+
+    finally:
+        GPIO.cleanup()
 
 def main():
     """Main function to start the voice assistant and webview."""
