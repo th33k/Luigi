@@ -44,12 +44,12 @@ additional_video_paths = {
     TOUCH_PIN_19: 'HTML/Video/Love_Red.mp4'
 }
 
-sound = pygame.mixer.Sound("HTML/WAV/angry.wav")
+sound = pygame.mixer.Sound("/home/pi/Desktop/LUIGI_Final/HTML/WAV/angry.wav")
 
 additional_sounds = {
-    TOUCH_PIN_6: pygame.mixer.Sound("HTML/WAV/emotion_compassion.wav"),
-    TOUCH_PIN_13: pygame.mixer.Sound("HTML/WAV/emotion_happy.wav"),
-    TOUCH_PIN_19: pygame.mixer.Sound("HTML/WAV/emotion_love.wav")
+    TOUCH_PIN_6: pygame.mixer.Sound("/home/pi/Desktop/LUIGI_Final/HTML/WAV/emotion_compassion.wav"),
+    TOUCH_PIN_13: pygame.mixer.Sound("/home/pi/Desktop/LUIGI_Final/HTML/WAV/emotion_happy.wav"),
+    TOUCH_PIN_19: pygame.mixer.Sound("/home/pi/Desktop/LUIGI_Final/HTML/WAV/emotion_love.wav")
 }
 
 # Flags to track if the sounds are playing
@@ -103,7 +103,7 @@ sound_thread = None
 # Function to start the webview
 def start_webview():
     global window
-    window = webview.create_window('LUIGI', 'Home.html', width=480, height=320)
+    window = webview.create_window('LUIGI', 'Home.html', width=480, height=320 ,fullscreen=True)
     webview.start()
 
 # Function to detect double tap on touch sensor

@@ -44,7 +44,7 @@ print("Touch sensor double-tap and shake detection. Press Ctrl+C to exit")
 
 def start_webview():
     global window
-    window = webview.create_window('LUIGI', 'sleep.html', width=480, height=320)
+    window = webview.create_window('LUIGI', 'sleep.html', width=480, height=320,fullscreen=True)
     webview.start()
 
 # Function to read accelerometer data
@@ -118,7 +118,7 @@ def shake_detection_thread():
                     video_thread.start()
                     
                     # Start audio playback in a thread
-                    audio_thread = threading.Thread(target=play_audio_in_thread, args=("/home/pi/Desktop/LUIGI_Final/HTML/WAV/emotion_compassion.wav", 11))
+                    audio_thread = threading.Thread(target=play_audio_in_thread, args=("/home/pi/Desktop/LUIGI_Final/HTML/WAV/yawn.wav", 11))
                     audio_thread.start()
 
                     # Wait for video and audio threads to finish
