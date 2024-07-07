@@ -23,29 +23,29 @@ def on_leave(event):
 # Create the main window
 root = tk.Tk()
 root.title("Python File Launcher")
-root.attributes("-fullscreen", True)  # Set fullscreen mode
+root.attributes("-fullscreen", False)  # Set fullscreen mode
 root.geometry("1024x768")
 root.configure(bg="black")
 
 button_font = ("Helvetica", 40, "bold")
 
 # Create buttons for the left side
-left_button1 = tk.Button(root, text="Click Bubble", command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/Games/game1.py'), bg="purple1", fg="white")
+left_button1 = tk.Button(root, text="Click Bubble", command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/Functions/Games/game1.py'), bg="purple1", fg="white")
 left_button1.place(x=40, y=130, width=200, height=100)
 left_button1.bind("<Enter>", on_enter_button)
 left_button1.bind("<Leave>", on_leave_button)
 
-left_button2 = tk.Button(root, text="Mind Puzzle", command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/Games/game2.py'), bg="purple1", fg="white")
+left_button2 = tk.Button(root, text="Mind Puzzle", command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/Functions/Games/game2.py'), bg="purple1", fg="white")
 left_button2.place(x=40, y=270, width=200, height=100)
 left_button2.bind("<Enter>", on_enter_button)
 left_button2.bind("<Leave>", on_leave_button)
 
-left_button3 = tk.Button(root, text="✊✋✌", font=button_font, command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/Games/RPS.py'), bg="purple1", fg="white")
+left_button3 = tk.Button(root, text="✊✋✌", font=button_font, command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/Functions/Games/RPS.py'), bg="purple1", fg="white")
 left_button3.place(x=40, y=410, width=200, height=100)
 left_button3.bind("<Enter>", on_enter_button)
 left_button3.bind("<Leave>", on_leave_button)
 
-left_button4 = tk.Button(root, text="Selfie", command=lambda: open_python_file(''), bg="purple1", fg="white")
+left_button4 = tk.Button(root, text="Hey LUIGI", command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/Functions/Hey_Luigi/Hey_luigi.py'), bg="purple1", fg="white")
 left_button4.place(x=40, y=550, width=200, height=100)
 left_button4.bind("<Enter>", on_enter_button)
 left_button4.bind("<Leave>", on_leave_button)
@@ -56,7 +56,7 @@ right_button1.place(x=784, y=130, width=200, height=100)
 right_button1.bind("<Enter>", on_enter_button)
 right_button1.bind("<Leave>", on_leave_button)
 
-right_button2 = tk.Button(root, text="Hey LUIGI", command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/Hey_Luigi/Heyluigi.py'), bg="purple1", fg="white")
+right_button2 = tk.Button(root, text="Selfie", command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/Functions/Selfie/Selfie.py'), bg="purple1", fg="white")
 right_button2.place(x=784, y=270, width=200, height=100)
 right_button2.bind("<Enter>", on_enter_button)
 right_button2.bind("<Leave>", on_leave_button)
