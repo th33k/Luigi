@@ -201,7 +201,7 @@ def text_to_speech(answer, internet):
 
     if output_file:
         play_audio(output_file)
-        os.remove(output_file)
+        #os.remove(output_file)
 
 def open_webview():
     """Open webview for user interaction."""
@@ -220,7 +220,7 @@ def voice_assistant(internet_status):
     play_audio(os.path.join(current_directory, 'Resources', 'Audio', 'hello_Luigi.mp3'))
 
     try:
-        for _ in range(10):
+        for _ in range(2):
             text = speech_to_text(recognizer, microphone, internet_status)
             print("You said:", text)
             play_audio(os.path.join(current_directory, 'Resources', 'Audio', 'mmm.wav'))
@@ -237,6 +237,7 @@ def voice_assistant(internet_status):
 
             play_audio(os.path.join(current_directory, 'Resources', 'Audio', 'aaha.wav'))
             text_to_speech(answer, internet_status)
+            #play_audio(os.path.join(current_directory, 'Resources', 'Audio', 'aaha.wav'))
         os._exit(0)
         
     except KeyboardInterrupt:
