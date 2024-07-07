@@ -22,6 +22,10 @@ cap = cv2.VideoCapture(0)
 cap.set(3, WIDTH)
 cap.set(4, HEIGHT)
 
+# Get the current directory
+current_directory = os.path.dirname(os.path.realpath(__file__))
+resource_directory = os.path.join(current_directory, 'Resources')
+
 currentState = 'HOME'
 currentRound = 0
 playerWinnings = 0
@@ -37,8 +41,8 @@ pygame.mixer.init()
 
 # Pre-load the sound files
 sounds = {
-    'notify': pygame.mixer.Sound('Resources/notify.wav'),
-    'game_music': 'Resources/RPS.mp3'
+    'notify': pygame.mixer.Sound(os.path.join(resource_directory, 'notify.wav')),
+    'game_music': os.path.join(resource_directory, 'RPS.mp3')
 }
 
 def playSound(name):
@@ -74,7 +78,7 @@ def game(hands):
     playSound('game_music')
 
     global gameRandomNumber, currentState, playerWinnings, pcWinnings, currentRound, imgAI, imgScaled
-    imgBG = cv2.imread("Resources/game_bg.png")
+    imgBG = cv2.imread(os.path.join(resource_directory, 'game_bg.png'))
     imgBG[182:441, 570:830] = imgScaled
 
     if hands:
@@ -88,10 +92,10 @@ def game(hands):
                 pcWinnings += 1
             currentState = 'GAME_SCORES'
 
-        imgAI = cv2.imread(f'Resources/{gameRandomNumber}.png', cv2.IMREAD_UNCHANGED)
+        imgAI = cv2.imread(os.path.join(resource_directory, f'{gameRandomNumber}.png'), cv2.IMREAD_UNCHANGED)
         imgBG = cvzone.overlayPNG(imgBG, imgAI, (69, 181))
     else:
-        imgAI = cv2.imread(f'Resources/{gameRandomNumber}.png', cv2.IMREAD_UNCHANGED)
+        imgAI = cv2.imread(os.path.join(resource_directory, f'{gameRandomNumber}.png'), cv2.IMREAD_UNCHANGED)
         imgBG = cvzone.overlayPNG(imgBG, imgAI, (69, 181))
 
     cv2.imshow("Game", imgBG)
@@ -101,7 +105,7 @@ def game(hands):
 def gameScores():
     global gameScoreProgressBarCounter, currentState, currentRound
     gameScoreProgressBarCounter += 1
-    imgBG = cv2.imread("Resources/game_score_bg.png")
+    imgBG = cv2.imread(os.path.join(resource_directory, 'game_score_bg.png'))
     cv2.putText(imgBG, str(currentRound), (495, 60), cv2.FONT_HERSHEY_DUPLEX, 2, (190, 183, 36), 2)
     cv2.putText(imgBG, str(pcWinnings), (90, 400), cv2.FONT_HERSHEY_DUPLEX, 10, (190, 183, 36), 10)
     cv2.putText(imgBG, str(playerWinnings), (600, 400), cv2.FONT_HERSHEY_DUPLEX, 10, (190, 183, 36), 10)
@@ -116,7 +120,7 @@ def finalScores():
     global gameScoreProgressBarCounter, currentState, playerWinnings, pcWinnings, currentRound
     gameScoreProgressBarCounter += 1
     defaultBackground = "draw" if playerWinnings == pcWinnings else 'lost' if pcWinnings > playerWinnings else 'won'
-    imgBG = cv2.imread(f"Resources/{defaultBackground}.png")
+    imgBG = cv2.imread(os.path.join(resource_directory, f'{defaultBackground}.png'))
     cv2.imshow("Game", imgBG)
 
     if gameScoreProgressBarCounter >= PROGRESS_BAR_MAX:
