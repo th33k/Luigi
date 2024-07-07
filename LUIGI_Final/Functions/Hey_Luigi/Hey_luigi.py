@@ -18,7 +18,7 @@ genai.configure(api_key=gemini_api_key)
 
 elevenlabs_api_keys = [
     "c506c8567a9fb92d06e59e063d9c0fdc",
-    "sk_fd9630319dbbe243a6712538caea5bd6a7a9c545d0702f17",
+    "sk_1fbcccdd635adc3cf90b823c8151388899642e0fccec35bd",
     "<api-key-3>",
     "<api-key-4>",
     "<api-key-5>"
@@ -51,7 +51,6 @@ def play_audio(file):
 
 def speech_to_text(recognizer, microphone, internet):
     """Convert speech to text."""
-    print("Speech to Text")
     def record_speech(duration, sample_rate=16000):
         recording = sd.rec(int(duration * sample_rate), samplerate=sample_rate, channels=1, dtype='float32')
         sd.wait()
@@ -78,8 +77,10 @@ def speech_to_text(recognizer, microphone, internet):
     if internet:
         with microphone as source:
             recognizer.adjust_for_ambient_noise(source)
+            print("Listening...")
             audio = recognizer.listen(source, phrase_time_limit=10)
         try:
+            print("Recognizing...")
             return recognizer.recognize_google(audio)
         except sr.RequestError:
             return "API unavailable"
@@ -113,7 +114,7 @@ def answer_generate(input_string, internet):
             "temperature": 1,
             "top_p": 0.90,
             "top_k": 64,
-            "max_output_tokens": 100,
+            "max_output_tokens": 50,
             "response_mime_type": "text/plain",
         }
         model = genai.GenerativeModel(
@@ -126,24 +127,28 @@ def answer_generate(input_string, internet):
 
 def text_to_speech(answer, internet):
     """Convert text to speech using Eleven Labs API or local TTS."""
+    
     def use_elevenlabs(answer):
         CHUNK_SIZE = 1024
         url = "https://api.elevenlabs.io/v1/text-to-speech/VR6AewLTigWG4xSOukaG"
-        data = {
+        querystring = {"enable_logging": "true", "output_format": "mp3_44100_128"}
+        payload = {
             "text": answer,
+            "model_id": "eleven_monolingual_v1",
             "voice_settings": {
                 "stability": 0.5,
                 "similarity_boost": 0.5,
+                "style": 0.5,
                 "use_speaker_boost": True
             }
         }
+
         for api_key in elevenlabs_api_keys:
             headers = {
-                "Accept": "audio/mpeg",
-                "Content-Type": "application/json",
-                "xi-api-key": api_key
+                "xi-api-key": api_key,
+                "Content-Type": "application/json"
             }
-            response = requests.post(url, json=data, headers=headers)
+            response = requests.request("POST", url, json=payload, headers=headers, params=querystring)
             if response.status_code == 200:
                 output_file = os.path.join(current_directory, 'output_generate.mp3')
                 with open(output_file, 'wb') as f:
@@ -166,16 +171,24 @@ def text_to_speech(answer, internet):
             engine.setProperty('voice', voices[1].id)
             engine.say(answer)
             engine.runAndWait()
+            print("Audio played using pyttsx3")
+            return None
         except Exception as e:
             print(f"pyttsx3 Error: {e}")
             try:
                 tts = gTTS(text=answer, lang='en')
                 output_file = os.path.join(current_directory, 'output_generate.mp3')
                 tts.save(output_file)
+                print("Audio file saved using gTTS")
                 return output_file
             except Exception as e:
                 print(f"gTTS Error: {e}")
                 return None
+
+    def play_audio(file_path):
+        # Implement audio playback logic here
+        print(f"Playing audio from file: {file_path}")
+        # Use appropriate audio playback library, such as pydub or playsound
 
     if internet:
         output_file = use_elevenlabs(answer)
@@ -184,12 +197,12 @@ def text_to_speech(answer, internet):
 
     if output_file:
         play_audio(output_file)
-        os.remove(output_file)
+        #os.remove(output_file)
 
 def open_webview():
     """Open webview for user interaction."""
     try:
-        webview.create_window('Hey Luigi', os.path.join(current_directory, '../Resources/web/web.html'), width=480, height=320, fullscreen=False)
+        webview.create_window('Hey Luigi', os.path.join(current_directory, 'web.html'), width=480, height=320, fullscreen=False)
     except Exception as e:
         print("Failed to open webview:", e)
 
@@ -200,13 +213,13 @@ def voice_assistant(internet_status):
 
     greeting_message = "Hello! I am your Luigi. How can I help you today?"
     print(greeting_message)
-    play_audio(os.path.join(current_directory, 'Resources','hello_Luigi.mp3'))
+    play_audio(os.path.join(current_directory, 'Resources', 'Audio', 'hello_Luigi.mp3'))
 
     try:
         for _ in range(10):
             text = speech_to_text(recognizer, microphone, internet_status)
             print("You said:", text)
-            play_audio(os.path.join(current_directory, 'Resources','mmm.wav'))
+            play_audio(os.path.join(current_directory, 'Resources', 'Audio', 'mmm.wav'))
             answer = answer_generate(text, internet_status)
             print("Answer:", answer)
             if answer in [
@@ -214,10 +227,10 @@ def voice_assistant(internet_status):
                 "Sorry, the speech recognition service is unavailable.",
                 "Sorry, I couldn't understand that. Please try again."
             ]:
-                play_audio(os.path.join(current_directory, 'Resources', 'tata.wav'))
+                play_audio(os.path.join(current_directory, 'Resources', 'Audio', 'tata.wav'))
                 print("Exit: Bye Bye")
                 break
-            play_audio(os.path.join(current_directory, 'Resources','aaha.wav'))
+            play_audio(os.path.join(current_directory, 'Resources', 'Audio', 'aaha.wav'))
             text_to_speech(answer, internet_status)
     except KeyboardInterrupt:
         print("Exiting...")
@@ -225,7 +238,7 @@ def voice_assistant(internet_status):
 def main():
     """Main function to start the voice assistant and webview."""
     internet_status = check_internet_connection()
-
+    print(current_directory)
     voice_thread = threading.Thread(target=voice_assistant, args=(internet_status,))
     voice_thread.start()
 
