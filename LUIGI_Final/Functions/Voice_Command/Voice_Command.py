@@ -3,9 +3,9 @@ from functions import fun1, fun2, fun3
 
 # Create a dictionary mapping commands to functions
 command_to_function = {
-    "buddy run": fun1,
-    "hey": fun2,
-    "hello": fun3
+    "Rock_Dance": fun1,
+    "Ganster Buddy": fun2,
+    "Happy Birthday": fun3
 }
 
 def recognize_speech_from_mic(recognizer, mic):
