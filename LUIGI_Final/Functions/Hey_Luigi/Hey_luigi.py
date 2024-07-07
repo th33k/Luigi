@@ -71,7 +71,6 @@ def speech_to_text(recognizer, microphone, internet):
             text = recognizer.recognize_google(audio)
         except sr.UnknownValueError:
             text = "Error-Code"
-        text = "I can't, Bye Bye!"
         return text
 
     if internet:
@@ -186,9 +185,14 @@ def text_to_speech(answer, internet):
                 return None
 
     def play_audio(file_path):
-        # Implement audio playback logic here
-        print(f"Playing audio from file: {file_path}")
-        # Use appropriate audio playback library, such as pydub or playsound
+        """Play audio using Pygame."""
+        try:
+            pygame.mixer.music.load(file_path)
+            pygame.mixer.music.play()
+            while pygame.mixer.music.get_busy():
+                pygame.time.Clock().tick(10)
+        except pygame.error as e:
+            print("Pygame error:", e)
 
     if internet:
         output_file = use_elevenlabs(answer)
@@ -197,7 +201,7 @@ def text_to_speech(answer, internet):
 
     if output_file:
         play_audio(output_file)
-        #os.remove(output_file)
+        os.remove(output_file)
 
 def open_webview():
     """Open webview for user interaction."""
@@ -238,7 +242,7 @@ def voice_assistant(internet_status):
 def main():
     """Main function to start the voice assistant and webview."""
     internet_status = check_internet_connection()
-    print(current_directory)
+
     voice_thread = threading.Thread(target=voice_assistant, args=(internet_status,))
     voice_thread.start()
 
