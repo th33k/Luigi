@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Clock and Stopwatch</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #282c34;
+            color: white;
+            text-align: center;
+        }
+
+        #clock {
+            font-size: calc(40px + 5vmin);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        #date {
+            font-size: calc(20px + 2vmin);
+            margin-top: 0.5em;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        }
+
+        #stopwatch {
+            display: none; /* Hide stopwatch initially */
+            font-size: calc(30px + 5vmin);
+            margin-top: 1em;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .toggle-format {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: 1px solid white;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .toggle-format:hover {
+            background-color: white;
+            color: #282c34;
+        }
+
+        .stopwatch-controls {
+            display: none; /* Hide stopwatch controls initially */
+            margin-top: 20px;
+        }
+
+        .btn {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .btn-danger {
+            background-color: #f44336; /* Red */
+        }
+
+        .btn-warning {
+            background-color: #ff9800; /* Orange */
+        }
+
+        .toggle-stopwatch {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: none;
+            border: 1px solid white;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .toggle-stopwatch:hover {
+            background-color: white;
+            color: #282c34;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div id="clock"></div>
+        <div id="date"></div>
+        <div id="stopwatch">00:00:00<span id="milliseconds">.000</span></div>
+        <div class="stopwatch-controls">
+            <button class="btn btn-success" onclick="startStopwatch()">Start</button>
+            <button class="btn btn-danger" onclick="stopStopwatch()">Stop</button>
+            <button class="btn btn-warning" onclick="resetStopwatch()">Reset</button>
+        </div>
+    </div>
+    <button class="toggle-format" onclick="toggleFormat()">Toggle 24h/12h</button>
+    <button class="toggle-stopwatch" onclick="toggleStopwatch()">Stopwatch</button>
+    <script>
+        let is24HourFormat = true;
+        let stopwatchInterval;
+        let stopwatchRunning = false;
+        let stopwatchTime = 0; // in milliseconds
+        let previousTime = 0; // to track previous milliseconds for accuracy
+
+        function updateClock() {
+            const now = new Date();
+            const clock = document.getElementById('clock');
+            const date = document.getElementById('date');
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+
+            if (!is24HourFormat) {
+                hours = hours % 12;
+                hours = hours ? hours : 12; // the hour '0' should be '12'
+            }
+
+            hours = String(hours).padStart(2, '0');
+            clock.textContent = is24HourFormat ? `${hours}:${minutes}:${seconds}` : `${hours}:${minutes}:${seconds} ${ampm}`;
+            date.textContent = now.toDateString();
+        }
+
+        function toggleFormat() {
+            is24HourFormat = !is24HourFormat;
+            updateClock(); // Update clock format immediately
+        }
+
+        function toggleStopwatch() {
+            const clock = document.getElementById('clock');
+            const date = document.getElementById('date');
+            const stopwatch = document.getElementById('stopwatch');
+            const stopwatchButton = document.querySelector('.toggle-stopwatch');
+            const stopwatchControls = document.querySelector('.stopwatch-controls');
+
+            if (stopwatch.style.display === 'none') {
+                // Switch to stopwatch
+                clock.style.display = 'none';
+                date.style.display = 'none';
+                stopwatch.style.display = 'block';
+                stopwatchButton.textContent = 'Digital Clock';
+                stopwatchControls.style.display = 'block';
+            } else {
+                // Switch to digital clock
+                clearInterval(stopwatchInterval);
+                stopwatchRunning = false;
+                stopwatchButton.textContent = 'Stopwatch';
+                stopwatchControls.style.display = 'none';
+                updateClock(); // Update digital clock display
+                clock.style.display = 'block';
+                date.style.display = 'block';
+                stopwatch.style.display = 'none';
+            }
+        }
+
+        function updateStopwatch() {
+            const stopwatch = document.getElementById('stopwatch');
+            const currentTime = Date.now();
+            const elapsedTime = currentTime - previousTime + stopwatchTime;
+            stopwatchTime = elapsedTime;
+            previousTime = currentTime;
+
+            const hours = Math.floor(stopwatchTime / 3600000);
+            const minutes = Math.floor((stopwatchTime % 3600000) / 60000);
+            const seconds = Math.floor((stopwatchTime % 60000) / 1000);
+            const milliseconds = stopwatchTime % 1000;
+
+            stopwatch.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(3, '0')}`;
+        }
+
+        function startStopwatch() {
+            if (!stopwatchRunning) {
+                previousTime = Date.now();
+                stopwatchInterval = setInterval(updateStopwatch, 10); // Update every 10 milliseconds for smooth display
+                stopwatchRunning = true;
+            }
+        }
+
+        function stopStopwatch() {
+            clearInterval(stopwatchInterval);
+            stopwatchRunning = false;
+        }
+
+        function resetStopwatch() {
+            clearInterval(stopwatchInterval);
+            stopwatchRunning = false;
+            stopwatchTime = 0;
+            const stopwatch = document.getElementById('stopwatch');
+            stopwatch.textContent = '00:00:00.000';
+        }
+
+        setInterval(updateClock, 1000); // Update clock every second for smooth display
+        updateClock(); // Initial call to display clock immediately
+    </script>
+</body>
+</html>
