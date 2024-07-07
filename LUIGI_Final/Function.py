@@ -51,7 +51,7 @@ left_button4.bind("<Enter>", on_enter_button)
 left_button4.bind("<Leave>", on_leave_button)
 
 # Create buttons for the right side
-right_button1 = tk.Button(root, text="Clock", command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/HTML/digitalclock.py'), bg="purple1", fg="white")
+right_button1 = tk.Button(root, text="Clock", command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/HTML/clock.py'), bg="purple1", fg="white")
 right_button1.place(x=784, y=130, width=200, height=100)
 right_button1.bind("<Enter>", on_enter_button)
 right_button1.bind("<Leave>", on_leave_button)
@@ -66,7 +66,7 @@ right_button3.place(x=784, y=410, width=200, height=100)
 right_button3.bind("<Enter>", on_enter_button)
 right_button3.bind("<Leave>", on_leave_button)
 
-right_button4 = tk.Button(root, text="Sleep", command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/HTML/Sleep.py'), bg="purple1", fg="white")
+right_button4 = tk.Button(root, text="Sleep", command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/HTML/sleep.py'), bg="purple1", fg="white")
 right_button4.place(x=784, y=550, width=200, height=100)
 right_button4.bind("<Enter>", on_enter_button)
 right_button4.bind("<Leave>", on_leave_button)
