@@ -75,7 +75,6 @@ def identifyFingerGesture(fingers):
     return 0
 
 def game(hands):
-    playSound('game_music')
 
     global gameRandomNumber, currentState, playerWinnings, pcWinnings, currentRound, imgAI, imgScaled
     imgBG = cv2.imread(os.path.join(resource_directory, 'game_bg.png'))
@@ -150,6 +149,7 @@ def main():
         if currentState == 'HOME':
             gameScores()
             currentState = 'GAME'
+            playSound('game_music')
         elif currentState == 'GAME':
             game(hands)
         elif currentState == 'GAME_SCORES':
