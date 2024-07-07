@@ -206,7 +206,7 @@ def text_to_speech(answer, internet):
 def open_webview():
     """Open webview for user interaction."""
     try:
-        webview.create_window('Hey Luigi', os.path.join(current_directory, 'web.html'), width=480, height=320, fullscreen=False)
+        webview.create_window('Hey Luigi', os.path.join(current_directory, 'web.html'), width=480, height=320, fullscreen=True)
     except Exception as e:
         print("Failed to open webview:", e)
 
@@ -233,11 +233,15 @@ def voice_assistant(internet_status):
             ]:
                 play_audio(os.path.join(current_directory, 'Resources', 'Audio', 'tata.wav'))
                 print("Exit: Bye Bye")
-                break
+                os._exit(0)
+
             play_audio(os.path.join(current_directory, 'Resources', 'Audio', 'aaha.wav'))
             text_to_speech(answer, internet_status)
+        os._exit(0)
+        
     except KeyboardInterrupt:
         print("Exiting...")
+        os._exit(0)
 
 def main():
     """Main function to start the voice assistant and webview."""
