@@ -1,9 +1,9 @@
 import speech_recognition as sr
-from functions import fun1, fun2, fun3
+from functions import Rock_Dance, fun2, fun3
 
 # Create a dictionary mapping commands to functions
 command_to_function = {
-    "Rock_Dance": fun1,
+    "Rock_Dance": Rock_Dance,
     "Ganster Buddy": fun2,
     "Happy Birthday": fun3
 }
