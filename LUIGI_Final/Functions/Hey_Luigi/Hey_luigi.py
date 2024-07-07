@@ -279,7 +279,8 @@ def voice_assistant(internet_status):
 
     except KeyboardInterrupt:
         print("Exiting...")
-
+        os._exit(0)
+        
     finally:
         GPIO.cleanup()
 
