@@ -44,12 +44,12 @@ additional_video_paths = {
     TOUCH_PIN_19: 'HTML/Video/Love_Red.mp4'
 }
 
-sound = pygame.mixer.Sound("/home/pi/Desktop/LUIGI_Final/HTML/WAV/angry.wav")
+sound = pygame.mixer.Sound("/home/pi/Desktop/LUIGI_Final/HTML/Audio/angry.wav")
 
 additional_sounds = {
-    TOUCH_PIN_6: pygame.mixer.Sound("/home/pi/Desktop/LUIGI_Final/HTML/WAV/emotion_compassion.wav"),
-    TOUCH_PIN_13: pygame.mixer.Sound("/home/pi/Desktop/LUIGI_Final/HTML/WAV/emotion_happy.wav"),
-    TOUCH_PIN_19: pygame.mixer.Sound("/home/pi/Desktop/LUIGI_Final/HTML/WAV/emotion_love.wav")
+    TOUCH_PIN_6: pygame.mixer.Sound("/home/pi/Desktop/LUIGI_Final/HTML/Audio/emotion_compassion.wav"),
+    TOUCH_PIN_13: pygame.mixer.Sound("/home/pi/Desktop/LUIGI_Final/HTML/Audio/emotion_happy.wav"),
+    TOUCH_PIN_19: pygame.mixer.Sound("/home/pi/Desktop/LUIGI_Final/HTML/Audio/emotion_love.wav")
 }
 
 # Flags to track if the sounds are playing

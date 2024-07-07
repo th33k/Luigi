@@ -1,8 +1,10 @@
-import random
 import time
-import cv2
-import sys
+import threading
+import subprocess
 import os
+import RPi.GPIO as GPIO
+import random
+import cv2
 import cvzone
 from cvzone.HandTrackingModule import HandDetector
 import pygame
@@ -13,6 +15,12 @@ MAX_HANDS = 2
 ROUND_COUNT = 3
 FINGER_IDENTIFIER_THRESHOLD = 10
 PROGRESS_BAR_MAX = 80
+DOUBLE_TAP_INTERVAL = 0.5  # Define the double tap interval
+
+# GPIO setup
+TOUCH_PIN = 5  # GPIO pin 5 for touch sensor
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(TOUCH_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 # Initialize the hand detector
 detector = HandDetector(maxHands=MAX_HANDS)
@@ -72,7 +80,6 @@ def identifyFingerGesture(fingers):
 
 def game(hands):
     playSound('game_music')
-
     global gameRandomNumber, currentState, playerWinnings, pcWinnings, currentRound, imgAI, imgScaled
     imgBG = cv2.imread("Resources/game_bg.png")
     imgBG[182:441, 570:830] = imgScaled
@@ -130,9 +137,48 @@ def resetGame():
     currentRound = 0
     currentState = 'HOME'
 
+def detect_double_tap():
+    global last_tap_time, tap_count
+    last_tap_time = 0
+    tap_count = 0
+    try:
+        while True:
+            if GPIO.input(TOUCH_PIN) == GPIO.HIGH:
+                current_time = time.time()
+                if (current_time - last_tap_time) < DOUBLE_TAP_INTERVAL:
+                    tap_count += 1
+                else:
+                    tap_count = 1  # Reset tap count if the interval is too long
+                last_tap_time = current_time
+
+                if tap_count == 2:
+                    print("Double tap detected! Stopping current script and running a new one.")
+                    tap_count = 0  # Reset tap count after a double tap
+                    # Close all windows
+                    cv2.destroyAllWindows()
+                    pygame.quit()
+                    cap.release()
+                    # Run another Python script
+                    subprocess.run(['python3', '/home/pi/Desktop/LUIGI_Final/FUNTION.py'])
+                    os._exit(0)  # Terminate the script
+
+                # Debounce delay
+                while GPIO.input(TOUCH_PIN) == GPIO.HIGH:
+                    time.sleep(0.01)
+
+            time.sleep(0.01)
+    except KeyboardInterrupt:
+        print("Exiting program")
+    finally:
+        GPIO.cleanup()
+
 def main():
     global imgScaled, currentState
     
+    detection_thread = threading.Thread(target=detect_double_tap)
+    detection_thread.daemon = True
+    detection_thread.start()
+
     while True:
         videoReadingStatus, frame = cap.read()
         if not videoReadingStatus:

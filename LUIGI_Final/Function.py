@@ -30,17 +30,17 @@ root.configure(bg="black")
 button_font = ("Helvetica", 40, "bold")
 
 # Create buttons for the left side
-left_button1 = tk.Button(root, text="Click Bubble", command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/Functions/Games/game1.py'), bg="purple1", fg="white")
+left_button1 = tk.Button(root, text="Click Bubble", command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/Functions/Games/Click_Bubble.py'), bg="purple1", fg="white")
 left_button1.place(x=40, y=130, width=200, height=100)
 left_button1.bind("<Enter>", on_enter_button)
 left_button1.bind("<Leave>", on_leave_button)
 
-left_button2 = tk.Button(root, text="Mind Puzzle", command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/Functions/Games/game2.py'), bg="purple1", fg="white")
+left_button2 = tk.Button(root, text="Mind Puzzle", command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/Functions/Games/Mind_Puzzle.py'), bg="purple1", fg="white")
 left_button2.place(x=40, y=270, width=200, height=100)
 left_button2.bind("<Enter>", on_enter_button)
 left_button2.bind("<Leave>", on_leave_button)
 
-left_button3 = tk.Button(root, text="✊✋✌", font=button_font, command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/Functions/Games/RPS.py'), bg="purple1", fg="white")
+left_button3 = tk.Button(root, text="✊✋✌", font=button_font, command=lambda: open_python_file('/home/pi/Desktop/LUIGI_Final/Functions/Games/RPS/RPS.py'), bg="purple1", fg="white")
 left_button3.place(x=40, y=410, width=200, height=100)
 left_button3.bind("<Enter>", on_enter_button)
 left_button3.bind("<Leave>", on_leave_button)
