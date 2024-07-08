@@ -4,6 +4,7 @@ import soundfile as sf              # Helps read and write sound files.
 import speech_recognition as sr     # Understands spoken words and changes them to text.
 from pathlib import Path
 from openai import OpenAI
+import pygame
 
 # Set up OpenAI API key
 openai = OpenAI(api_key="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")
@@ -85,7 +86,6 @@ def speak(text):
     response.stream_to_file(speech_file_path)
 
     # Play the generated speech
-    import pygame
     pygame.mixer.init()
     pygame.mixer.music.load(speech_file_path)
     pygame.mixer.music.play()
@@ -93,28 +93,32 @@ def speak(text):
     while pygame.mixer.music.get_busy():
         pygame.time.Clock().tick(10)
 
-# Run the script constantly until you close it
-while True:
-    # Record speech for 3 seconds
-    record_duration = 3
-    sample_rate = 16000
-    audio_data = record_speech(record_duration, sample_rate)
-    audiofile = "speech_recording.wav"
-    save_wav(audio_data, audiofile, sample_rate)
+def main():
+    # Run the script constantly until you close it
+    while True:
+        # Record speech for 3 seconds
+        record_duration = 3
+        sample_rate = 16000
+        audio_data = record_speech(record_duration, sample_rate)
+        audiofile = "speech_recording.wav"
+        save_wav(audio_data, audiofile, sample_rate)
 
-    # Convert recorded speech to text
-    input_text = speech_to_text(audiofile)
-    print("Input Text: ", input_text)
+        # Convert recorded speech to text
+        input_text = speech_to_text(audiofile)
+        print("Input Text: ", input_text)
 
-    # Generate a reply
-    reply = reply_to_string(input_text)
-    print("Generated Text: ", reply)
+        # Generate a reply
+        reply = reply_to_string(input_text)
+        print("Generated Text: ", reply)
 
-    # Synthesize the generated text using gTTS
-    speak(reply)
+        # Synthesize the generated text using gTTS
+        speak(reply)
 
-    if input_text.lower() == "bye":  # Check for "bye" correctly
-        break  # Exit the loop
+        if input_text.lower() == "bye":  # Check for "bye" correctly
+            break  # Exit the loop
 
-    # Add a delay of 1 second before recording speech again
-    time.sleep(1)
+        # Add a delay of 1 second before recording speech again
+        time.sleep(1)
+
+if __name__ == "__main__":
+    main()
