@@ -54,17 +54,17 @@ def speech_to_text():
         return "Unable to recognize speech"
 
 def get_reply(input_string):
-    if input_string in REPLY_DICT:
-        return REPLY_DICT[input_string]
-    else:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful voice assistant."},
-                {"role": "user", "content": input_string}
-            ]
-        )
-        return response.choices[0].message['content']
+    return REPLY_DICT.get(input_string, generate_text(input_string))
+
+def generate_text(prompt):
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful voice assistant."},
+            {"role": "user", "content": prompt}
+        ]
+    )
+    return response.choices[0].message['content']
 
 def speak(text):
     speech_file_path = Path(__file__).parent / "speech.mp3"
@@ -77,34 +77,28 @@ def speak(text):
         with open(speech_file_path, "wb") as f:
             f.write(response["audio_content"])
 
-        pygame.mixer.music.load(speech_file_path)
-        pygame.mixer.music.play()
+        play_audio(speech_file_path)
+    except Exception:
+        fallback_tts(text)
 
-        while pygame.mixer.music.get_busy():
-            pygame.time.Clock().tick(10)
+def play_audio(file_path):
+    pygame.mixer.music.load(file_path)
+    pygame.mixer.music.play()
+    while pygame.mixer.music.get_busy():
+        pygame.time.Clock().tick(10)
 
-    except Exception as e:
-        print(f"OpenAI TTS Error: {e}")
+def fallback_tts(text):
+    try:
+        engine.say(text)
+        engine.runAndWait()
+    except Exception:
         try:
-            engine.say(text)
-            engine.runAndWait()
-            print("Audio played using pyttsx3")
+            tts = gTTS(text=text, lang='en')
+            output_file = Path(__file__).parent / "output_generate.mp3"
+            tts.save(output_file)
+            play_audio(output_file)
         except Exception as e:
-            print(f"pyttsx3 Error: {e}")
-            try:
-                tts = gTTS(text=text, lang='en')
-                output_file = Path(__file__).parent / "output_generate.mp3"
-                tts.save(output_file)
-                print("Audio file saved using gTTS")
-
-                pygame.mixer.music.load(output_file)
-                pygame.mixer.music.play()
-
-                while pygame.mixer.music.get_busy():
-                    pygame.time.Clock().tick(10)
-
-            except Exception as e:
-                print(f"gTTS Error: {e}")
+            print(f"gTTS Error: {e}")
 
 def main():
     while True:
