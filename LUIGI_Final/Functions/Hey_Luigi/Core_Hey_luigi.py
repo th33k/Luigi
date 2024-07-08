@@ -257,7 +257,7 @@ def main():
     voice_thread = threading.Thread(target=voice_assistant, args=(internet_status,))
     voice_thread.start()
 
-    time.sleep(1)
+    time.sleep(0.1)
 
     open_webview()
     webview.start()
