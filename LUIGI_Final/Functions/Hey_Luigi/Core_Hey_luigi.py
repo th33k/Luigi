@@ -94,8 +94,8 @@ def speech_to_text(recognizer, microphone, internet):
 def answer_generate(input_string, internet):
     """Generate an answer based on the input string."""
     reply_dict = {
-        "what is the time now?": f"Current time: {current_datetime.strftime('%H:%M:%S')}",
-        "what is the date today?": f"Current date: {current_datetime.strftime('%Y-%m-%d')}",
+        "what is the time now": f"Current time: {current_datetime.strftime('%H:%M:%S')}",
+        "what is the date today": f"Current date: {current_datetime.strftime('%Y-%m-%d')}",
         "Error-Code": "Sorry, I couldn't understand that. Please try again.",
         "API unavailable": "Sorry, the speech recognition service is unavailable.",
         "Unable to recognize speech": "Sorry, I couldn't recognize your speech. Please try again.",
