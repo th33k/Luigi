@@ -11,6 +11,7 @@ import pyttsx3
 from gtts import gTTS
 import webview
 import google.generativeai as genai
+from datetime import datetime
 
 # Configuration
 gemini_api_key = "AIzaSyBiy1LbIazAYhR34_TxpaDEx53eWe0wi6Q"
@@ -27,6 +28,8 @@ current_directory = os.path.dirname(os.path.realpath(__file__))
 
 # Initialize Pygame for audio playback
 pygame.mixer.init()
+
+current_datetime = datetime.now()
 
 def check_internet_connection(host="8.8.8.8", port=53, timeout=3):
     """Check for internet connectivity."""
@@ -91,6 +94,8 @@ def speech_to_text(recognizer, microphone, internet):
 def answer_generate(input_string, internet):
     """Generate an answer based on the input string."""
     reply_dict = {
+        "what is the time now?": f"Current time: {current_datetime.strftime('%H:%M:%S')}",
+    "what is the date today?": f"Current date: {current_datetime.strftime('%Y-%m-%d')}",
         "Error-Code": "Sorry, I couldn't understand that. Please try again.",
         "API unavailable": "Sorry, the speech recognition service is unavailable.",
         "Unable to recognize speech": "Sorry, I couldn't recognize your speech. Please try again.",
