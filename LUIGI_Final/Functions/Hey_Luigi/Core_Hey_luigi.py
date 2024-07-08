@@ -127,6 +127,7 @@ def answer_generate(input_string, internet):
         )
         chat_session = model.start_chat(history=[])
         response = chat_session.send_message(input_string)
+        generated_text = response.text.replace("*", "").replace("**", "").replace("***", "")
         return response.text
 
 def text_to_speech(answer, internet):
