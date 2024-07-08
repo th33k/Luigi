@@ -13,6 +13,16 @@ openai.api_key = "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"
 recognizer = sr.Recognizer()
 microphone = sr.Microphone()
 
+# Preload TTS engine
+engine = pyttsx3.init()
+engine.setProperty('rate', 150)
+engine.setProperty('volume', 1)
+voices = engine.getProperty('voices')
+engine.setProperty('voice', voices[1].id)
+
+# Initialize Pygame mixer
+pygame.mixer.init()
+
 # Dictionary mapping input strings to reply strings
 REPLY_DICT = {
     "hello": "Hi there!",
@@ -67,7 +77,6 @@ def speak(text):
         with open(speech_file_path, "wb") as f:
             f.write(response["audio_content"])
 
-        pygame.mixer.init()
         pygame.mixer.music.load(speech_file_path)
         pygame.mixer.music.play()
 
@@ -77,11 +86,6 @@ def speak(text):
     except Exception as e:
         print(f"OpenAI TTS Error: {e}")
         try:
-            engine = pyttsx3.init()
-            engine.setProperty('rate', 150)
-            engine.setProperty('volume', 1)
-            voices = engine.getProperty('voices')
-            engine.setProperty('voice', voices[1].id)
             engine.say(text)
             engine.runAndWait()
             print("Audio played using pyttsx3")
@@ -93,7 +97,6 @@ def speak(text):
                 tts.save(output_file)
                 print("Audio file saved using gTTS")
 
-                pygame.mixer.init()
                 pygame.mixer.music.load(output_file)
                 pygame.mixer.music.play()
 
