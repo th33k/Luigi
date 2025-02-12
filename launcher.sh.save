@@ -1,0 +1,3 @@
+#!/bin/bash
+cd /home/pi/Desktop/Luigi
+python3 meetlouigi_with_fear_start.py
