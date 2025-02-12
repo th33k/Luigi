@@ -103,7 +103,7 @@ right_button2.place(x=784, y=270, width=200, height=100)
 right_button2.bind("<Enter>", on_enter_button)
 right_button2.bind("<Leave>", on_leave_button)
 
-right_button3 = tk.Button(root, text="Drive",font=button_font, command=lambda: open_python_file('/home/pi/Desktop/Luigi/#Remote_Control/Bluetooth.py'), bg="purple1", fg="white")
+right_button3 = tk.Button(root, text="Drive",font=button_font, command=lambda: open_python_file('/home/pi/Desktop/Luigi/Remote_Control/Bluetooth.py'), bg="purple1", fg="white")
 right_button3.place(x=784, y=410, width=200, height=100)
 right_button3.bind("<Enter>", on_enter_button)
 right_button3.bind("<Leave>", on_leave_button)
