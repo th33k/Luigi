@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hey_Luigi</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            overflow: hidden;
+        }
+        
+        .video-container {
+            width: 100%;
+            height: 100%;
+        }
+        
+        video {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <video id="videoPlayer" autoplay muted loop>
+            <source src="Resources/Video/Color_Shift.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <script>
+        // Ensure the video loops
+        const videoPlayer = document.getElementById('videoPlayer');
+        videoPlayer.addEventListener('ended', () => {
+            videoPlayer.currentTime = 0;
+            videoPlayer.play();
+        });
+    </script>
+</body>
+</html>
